@@ -27,8 +27,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-#DEBUG_TOOLBAR_PATCH_SETTINGS = False
+# Django debug toolbar
+INTERNAL_IPS = ['127.0.0.1']
 
+#DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 # Application definition
 
