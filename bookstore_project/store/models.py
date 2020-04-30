@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from enum import Enum 
-
+from store.choices import * 
 # Create your models here.
 
 class Author(models.Model):
@@ -16,36 +15,15 @@ class Author(models.Model):
 
 class Book(models.Model):
 
-	class STATUS(Enum):
-		available = (1, 'Available to borrow')
-		borrowed = (2, 'Borrowed by someone')
-		archived = (3, 'Archived - not available anymore')
-
-		@classmethod
-		def get_value(cls, member):
-			return member.value[0]
-
-	class CATEGORY(Enum):
-		other = ('other', 'Other')
-		astronomy = ('astronomy', 'Astronomy')
-		biology = ('biology', 'Biology')
-		chemistry = ('chemistry', 'Chemistry')
-		history = ('history', 'History')
-		medecine = ('biology', 'Biology')
-		mathematics = ('mathematics', 'Mathematics')
-		psychology = ('psychology', 'Psychology')
-
-		@classmethod
-		def get_value(cls, member):
-			return cls[member].value[0]
-
 	reference = models.IntegerField('reference', null=True)
 	created_at = models.DateTimeField('creation date',  auto_now_add=True)
-	status = models.CharField('status', max_length=200, choices=[x.value for x in STATUS], default=STATUS.get_value(STATUS.available))
+	status = models.IntegerField('status', choices=STATUS_CHOICES, default=AVAILABLE)
 	title = models.CharField('title', max_length=200)
-	category = models.CharField('category', max_length=200, choices=[x.value for x in CATEGORY], default=CATEGORY.get_value('other'))
+	category = models.CharField('category', max_length=200, choices=CATEGORY_CHOICES, default=OTH)
 	picture = models.TextField('picture URL') 
 	price = models.IntegerField('price', null=True)
+	release_date = models.IntegerField('release date', null=True)
+	language = models.CharField('language', max_length=200)
 	authors = models.ManyToManyField(Author, related_name='books', blank=True)
 
 	class Meta:
@@ -77,5 +55,3 @@ class Booking(models.Model):
 
 	def __str__(self):
 		return self.user.name
-
-
