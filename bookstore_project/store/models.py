@@ -20,7 +20,7 @@ class Book(models.Model):
 	status = models.IntegerField('status', choices=STATUS_CHOICES, default=AVAILABLE)
 	title = models.CharField('title', max_length=200)
 	category = models.CharField('category', max_length=200, choices=CATEGORY_CHOICES, default=OTH)
-	picture = models.TextField('picture URL') 
+	picture = models.TextField('picture URL')
 	price = models.IntegerField('price', null=True)
 	release_date = models.IntegerField('release date', null=True)
 	language = models.CharField('language', max_length=200)
