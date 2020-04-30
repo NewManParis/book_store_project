@@ -17,6 +17,7 @@ HIS = "HISTORY"
 MED = "MEDECINE"
 MAT = "MATHEMATICS"
 PSY = "PSYCHOLOGY"
+COM = "COMPUTER SCIENCE"
 
 CATEGORY_CHOICES = (
     (OTH, ("Other")),
@@ -27,4 +28,5 @@ CATEGORY_CHOICES = (
     (MED, ("Medecine")),
     (MAT, ("Mathematics")),
     (PSY, ("Psychology")),
+    (COM, ("Computer science")),
 )    
