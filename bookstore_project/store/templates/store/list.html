@@ -1,0 +1,30 @@
+<div class="col-lg-12">
+    <hr>
+    <h2 class="intro-text text-center">{{ list_title }}
+    </h2>
+    <hr class="detail-separator">
+</div>
+
+{% include 'store/search_form.html' %}
+
+{% if books|length_is:"0" %}
+    <div class="text-center">
+    	<p> Aucun résultat à cette requète ! </p> 
+    </div>
+
+{% else %}
+	{% for book in books %}
+		<div class="col-sm-2 text-center">
+		    <a href="{% url 'store:detail' book_id=book.id %}">
+		      <img class="img-responsive" src="{{ book.picture }}" alt="{{ book.title }}">
+		    </a>
+		    <h3><a href="{% url 'store:detail' book_id=book.id %}">{{ book.title }}</a></h3>
+		    {% for author in book.authors.all %}
+		        <p>{{ author.name }}</p>
+		    {% endfor %}
+		</div>
+		{% if forloop.counter|divisibleby:3 %}<div class="clearfix"></div>{% endif %}
+		{% endfor %}
+
+{% endif %}
+

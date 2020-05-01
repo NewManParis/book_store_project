@@ -1,0 +1,35 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<div class="col-md-6">
+	<img class="img-responsive" src="{{ book.picture }}" alt="{{ book.title }}">
+    <h3>{{ book.title }}</h3>
+    {% for author in book.authors.all %}
+        <p>{{ author.name }}</p>
+    {% endfor %}
+</div>
+
+<h2 class="text-center artist_name">Réserver {{ book.title }}</h2>
+<p style="margin-bottom: 20px;">Vous êtes sur le point de réserver {{ book.title }}!</p>	
+<p style="margin-bottom: 20px;">Insérez votre  nom et votre adresse émail et venez le cherchez après en magasin !</p>
+
+<form class="form-inline" action="{% url 'store:detail' book_id=book.id %}" method="post">
+	{% csrf_token %}
+	<div class="form-group {% if form.name.errors %}has-warning has-feedback{% endif %}">
+		<label for="{{ form.name.id_for_label }}" class="control-label">Nom</label>
+      	<!-- <input type="text" name="name" value="" id="name"> -->
+     	 {{ form.name }}
+	</div>
+	<div class="form-group {% if form.email.errors %}has-warning has-feedback{% endif %}">
+		<label for="{{ form.email.id_for_label }}" class="control-label">E-mail</label>
+		<!--<input type="text" name="email" value="" id="email">-->
+		{{ form.email }}
+	</div>
+
+	<button type="submit" class="btn btn-success">Réserver</button>
+</form>
+</div>
+
+
+{% endblock %}
