@@ -8,9 +8,10 @@ from store.choices import *
 
 # Create your views here.
 def index(request):
-    books = Book.objects.all()
-    context = {'books' : books}
-
+    books = Book.objects.filter(status=2).order_by('-created_at')[:2]
+    context = {
+    'books' : books
+    }
     return render(request, 'store/index.html', context)
 
 def detail(request, book_id):
@@ -52,9 +53,19 @@ def detail(request, book_id):
     return render(request, 'store/detail.html', context)
 
 def listing(request):
-    books = Book.objects.all()
-    context = {'books' : books}
-
+    books_list = Book.objects.filter(status=2)
+    paginator = Paginator(books_list, 1)
+    page = request.GET.get('page')
+    try:
+        books = paginator.page(page)
+    except PageNotAnInteger:
+        books = paginator.page(1)
+    except EmptyPage:
+        books = paginator.page(paginator.num_pages)
+    context = {
+        'books': books,
+        'paginate': True
+    }
     return render(request, 'store/listing.html', context)
 
 def search(request):

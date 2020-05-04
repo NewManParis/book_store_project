@@ -28,3 +28,16 @@
 
 {% endif %}
 
+{% if paginate %}
+  <div class="clearfix"></div>
+  <nav aria-label="">
+    <ul class="pager">
+      {% if books.has_previous %}
+          <li><a href="?page={{ books.previous_page_number }}">Précédent</a></li>
+      {% endif %}
+      {% if books.has_next %}
+          <li><a href="?page={{ books.next_page_number }}">Suivant</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+{% endif %}
