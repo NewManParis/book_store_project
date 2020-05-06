@@ -30,7 +30,7 @@ if os.environ.get('ENV') == 'PRODUCTION':
 else:
     DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['books_store.herokuapp.com']
 
 # Django debug toolbar
 INTERNAL_IPS = ['127.0.0.1']
