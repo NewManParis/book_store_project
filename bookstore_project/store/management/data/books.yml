@@ -1,0 +1,89 @@
+books:
+  - title: Machine learning avec Python
+    authors:
+      - Andreas C. MUELLER
+      - Sarah GUIDO 
+    picture: "https://images-na.ssl-images-amazon.com/images/I/51st6OvJ6IL._SX409_BO1,204,203,200_.jpg"
+    category: COM
+  - title: Bien commencer avec Python 3
+    authors:
+      - Julien Faujanet 
+    picture: "https://images-na.ssl-images-amazon.com/images/I/51fzbk7HtnL._SX331_BO1,204,203,200_.jpg"
+    category: COM
+  - title: Python 3.8 - Bases & Exemples Concrets
+    authors:
+      - Daniel MEYER
+    picture: "https://images-na.ssl-images-amazon.com/images/I/41WCB4r007L._SX352_BO1,204,203,200_.jpg"
+    category: COM
+  - title: Programmation Python Conception et optimisation
+    authors:
+      -  Tarek Ziadé
+    picture: "https://images-na.ssl-images-amazon.com/images/I/41m+U4aJJQL._SX418_BO1,204,203,200_.jpg"
+    category: COM
+  - title: Programmer en s'amusant avec Python 
+    authors:
+      - Brendan SCOTT
+    picture: "https://m.media-amazon.com/images/I/51YHkovgMxL.jpg"
+    category: COM
+  - title: Mathématiques MPSI Tout-en-un
+    authors:
+      - Claude Deschamps
+      - François Moulin
+    picture: "https://m.media-amazon.com/images/I/41aEN7k0VTL.jpg"
+    category: MAT
+  - title: Maths PCSI-PTSI - 2e éd. Tout-en-un 
+    authors:
+      - Claude Deschamps
+      - François Moulin
+    picture: "https://m.media-amazon.com/images/I/51zMcGE0QGL.jpg"
+    category: MAT
+  - title: Physique Cours, exercices et méthodes 
+    authors:
+      - Albane Douillet
+      - Catherine Even-Beaudoin
+    picture: "https://m.media-amazon.com/images/I/51ZqiVmW+TL.jpg"
+    category: PHY
+  - title: Chimie Cours, exercices et méthodes (Fluoresciences) 
+    authors:
+      - Stéphane Perrio 
+      - Béatrice Roy
+      - Jean-Yves Winum 
+    picture: "https://m.media-amazon.com/images/I/41tsiFTtfML.jpg"
+    category: CHI
+  - title: Les voies étonnantes de la nouvelle psychologie
+    authors:
+      - Pierre Daco
+    picture: "https://images-na.ssl-images-amazon.com/images/I/51SDEGEJ3BL._SX291_BO1,204,203,200_.jpg"
+    category: PSY
+  - title: Les prodigieuses victoires de la psychologie moderne
+    authors:
+      - Pierre Daco
+    picture: "https://images-na.ssl-images-amazon.com/images/I/513FsVpKsGL._SX310_BO1,204,203,200_.jpg"
+    category: PSY
+  - title: Le complexe d'Œdipe Le rapport mère-fils en question
+    authors:
+      - Pierre Daco
+      - Gilles Azzopardi 
+    picture: "https://m.media-amazon.com/images/I/416gd6sVuvL.jpg"
+    category: PSY
+  - title: Le monde de Sophie
+    authors:
+      - Jostein Gaarder
+    picture: "https://images-na.ssl-images-amazon.com/images/I/51XW64ziD2L._SX301_BO1,204,203,200_.jpg"
+    category: PHY
+  - title: Ainsi parlait Zarathoustra
+    authors:
+      - Friedrich Nietzsche
+    picture: "https://images-na.ssl-images-amazon.com/images/I/4199OXgOpnL._SX307_BO1,204,203,200_.jpg"
+    category: PHY
+  - title: Histoire de la médecine De l'Antiquité à nos jours
+    authors:
+      - Roger Dachez
+    picture: "https://images-na.ssl-images-amazon.com/images/I/51+xjYiW7mL._SX316_BO1,204,203,200_.jpg"
+    category: MED
+  - title: Guide pratique de médecine interne
+    authors:
+      - Fabrice Hébert
+      - Christophe Bulliot
+    picture: "https://images-na.ssl-images-amazon.com/images/I/51Vg-OEF9JL._SX352_BO1,204,203,200_.jpg"
+    category: MED

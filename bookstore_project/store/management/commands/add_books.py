@@ -16,7 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # open file with data
         directory = os.path.dirname(os.path.dirname(__file__))
-        path = os.path.join(directory, 'data', 'albums.yml')
+        path = os.path.join(directory, 'data', 'books.yml')
         with open(path, 'r') as file:
             data = yaml.load(file)
             books = data['books']
@@ -38,7 +38,9 @@ class Command(BaseCommand):
                 except ObjectDoesNotExist:
                     book = Book.objects.create(
                         title=book['title'],
-                        picture=['picture']
+                        picture=book['picture'],
+                        category=book['category']
                     )
-                    book.authors = authors
-                    lg.info('New book: %s'%stored_book)
+                    #book.authors = authors
+                    book.authors.set(authors)
+                    #lg.info('New book: %s'%stored_book)

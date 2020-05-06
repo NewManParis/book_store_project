@@ -8,7 +8,7 @@ from store.choices import *
 
 # Create your views here.
 def index(request):
-    books = Book.objects.filter(status=2).order_by('-created_at')[:2]
+    books = Book.objects.filter(status=1).order_by('-created_at')[:12]
     context = {
     'books' : books
     }
@@ -53,8 +53,8 @@ def detail(request, book_id):
     return render(request, 'store/detail.html', context)
 
 def listing(request):
-    books_list = Book.objects.filter(status=2)
-    paginator = Paginator(books_list, 1)
+    books_list = Book.objects.filter(status=1)
+    paginator = Paginator(books_list, 5)
     page = request.GET.get('page')
     try:
         books = paginator.page(page)
