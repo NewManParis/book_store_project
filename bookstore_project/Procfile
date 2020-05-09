@@ -1,1 +1,1 @@
-web: gunicorn mybook-reservation.wsgi
+web: gunicorn bookstore_project.wsgi --log-file - --log-level debug
