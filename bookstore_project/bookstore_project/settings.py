@@ -91,7 +91,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql', # on utilise l'adaptateur postgresql
         'NAME': 'bookdata', # le nom de notre base de données créée précédemment
         'USER': 'postgres', # attention : remplacez par votre nom d'utilisateur !!
-        'PASSWORD': '',
+        'PASSWORD': '1234',
         'HOST': 'localhost',
         'PORT': '5432',
     }
