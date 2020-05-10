@@ -7,12 +7,13 @@ from django.contrib.auth.models import User
 # Create your models here
 
 class Profil(models.Model):
-	user = models.OneToOneField(User)  # OneToOne to User
+	user = models.OneToOneField(User, on_delete=models.CASCADE)  # OneToOne to User
 	web_site = models.URLField(blank=True)
 	#avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
 	signature = models.TextField(blank=True)   
-	subscribed newsletter = models.BooleanField(default=False)
+	subscribed_newsletter = models.BooleanField(default=False)
 
+	def __str__(self):
 		return "Profil of {0}".format(self.user.username)
 
 class Author(models.Model):
