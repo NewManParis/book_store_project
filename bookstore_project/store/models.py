@@ -1,7 +1,19 @@
 from django.db import models
 from django.utils import timezone
 from store.choices import * 
-# Create your models here.
+
+from django.contrib.auth.models import User
+
+# Create your models here
+
+class Profil(models.Model):
+	user = models.OneToOneField(User)  # OneToOne to User
+	web_site = models.URLField(blank=True)
+	#avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
+	signature = models.TextField(blank=True)   
+	subscribed newsletter = models.BooleanField(default=False)
+
+		return "Profil of {0}".format(self.user.username)
 
 class Author(models.Model):
 	name = models.CharField('name', max_length=200, unique=True)
