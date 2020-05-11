@@ -1,21 +1,9 @@
 from django.db import models
 from django.utils import timezone
 from store.choices import * 
-
-from django.contrib.auth.models import User
+from django import forms
 
 # Create your models here
-
-class Profil(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)  # OneToOne to User
-	web_site = models.URLField(blank=True)
-	#avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
-	signature = models.TextField(blank=True)   
-	subscribed_newsletter = models.BooleanField(default=False)
-
-	def __str__(self):
-		return "Profil of {0}".format(self.user.username)
-
 class Author(models.Model):
 	name = models.CharField('name', max_length=200, unique=True)
 
@@ -24,7 +12,6 @@ class Author(models.Model):
 
 	def __str__(self):
 		return self.name
-
 
 class Book(models.Model):
 
@@ -49,6 +36,8 @@ class Book(models.Model):
 class User(models.Model):
 	user_name = models.CharField('contact name', max_length=200)
 	user_email = models.EmailField('contact email', max_length=100)
+	password = models.CharField('password', max_length=100)
+	password_repeat = models.CharField('password repeat', max_length=100)
 
 	class Meta:
 		verbose_name = "user" 
@@ -68,3 +57,13 @@ class Booking(models.Model):
 
 	def __str__(self):
 		return self.user.name
+
+'''class Profil(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)  # OneToOne to User model
+	web_site = models.URLField(blank=True)
+	#avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
+	signature = models.TextField(blank=True)   
+	subscribed_newsletter = models.BooleanField(default=False)
+
+	def __str__(self):
+		return "Profil of {0}".format(self.user.username)'''

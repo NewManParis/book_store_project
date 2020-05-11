@@ -1,4 +1,4 @@
-from django.forms import ModelForm, TextInput, EmailInput
+from django.forms import ModelForm, TextInput, EmailInput, PasswordInput
 from django.forms.utils import ErrorList
 from django import forms
 
@@ -18,9 +18,11 @@ class ContactForm(ModelForm):
         fields = ["user_name", "user_email"]
         widgets = {
             'user_name': TextInput(attrs={'class': 'form-control'}),
-            'user_email': EmailInput(attrs={'class': 'form-control'})
+            'user_email': EmailInput(attrs={'class': 'form-control'}),
         }
 
-class ConnexionForm(forms.Form):
-    username = forms.CharField(label="User name", max_length=30)
-    password = forms.CharField(label="Password", widget=forms.PasswordInput)
+class RegisterForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+    password_repeat = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))

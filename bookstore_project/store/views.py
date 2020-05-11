@@ -1,31 +1,60 @@
 from django.shortcuts import render
 from store.models import Book, Author, User, Booking
-from .forms import ContactForm, ParagraphErrorList
+from .forms import ContactForm, ParagraphErrorList, RegisterForm
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction, IntegrityError
 from store.choices import * 
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 # Create your views here.
-def connexion(request):
-    error = False
 
-    if request.method == "POST":
-        form = ConnexionForm(request.POST)
+def user_register(request):
+
+    # if this is a POST request we need to process the form data   
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = RegisterForm(request.POST, error_class=ParagraphErrorList)
+        # check whether it's valid:
         if form.is_valid():
-            username = form.cleaned_data["username"]
-            password = form.cleaned_data["password"]
-            user = authenticate(username=username, password=password)  # Nous vérifions si les données sont correctes
-            if user:  # Si l'objet renvoyé n'est pas None
-                login(request, user)  # nous connectons l'utilisateur
-            else: # sinon une erreur sera affichée
-                error = True
-    else:
-        form = ConnexionForm()
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            password_repeat = form.cleaned_data['password_repeat']
 
-    return render(request, 'connexion.html', locals())
+            if User.objects.filter(username=username).exists():
+                return render(request, 'store/register.html', {
+                    'form': form,
+                    'error_message': 'Username already exists.'
+                })
+            elif User.objects.filter(email=email).exists():
+                return render(request, 'store/register.html', {
+                    'form': form,
+                    'error_message': 'Email already exists.'
+                })
+            elif password != password_repeat:
+                return render(request, 'store/register.html', {
+                    'form': form,
+                    'error_message': 'Passwords do not match.'
+                })
+            else:
+                # Create the user:
+                user = User.objects.create_user(username, email, password)
+                user.save()
+               
+                # Login the user
+                #login(request, user)
+               
+                # redirect to accounts page:
+                #return HttpResponseRedirect('/store/account')
+
+   # No post data availabe, let's just show the page.
+    else:
+        form = RegisterForm()
+
+    return render(request, 'store/register.html', {'form': form})
 
 def index(request):
     books = Book.objects.filter(status=1).order_by('-created_at')[:12]
