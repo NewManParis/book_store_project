@@ -6,10 +6,14 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction, IntegrityError
 from store.choices import * 
 from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.urls import reverse
 
 # Create your views here.
+def deconnexion(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('store:connexion'))
 
 def connexion(request):
     error = False
