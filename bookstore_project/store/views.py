@@ -5,18 +5,20 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction, IntegrityError
 from store.choices import * 
-
+from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
 # Create your views here.
+def user_account(request):
+    return render(request, 'store/account.html', locals())
 
 def user_register(request):
 
     # if this is a POST request we need to process the form data   
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        form = RegisterForm(request.POST, error_class=ParagraphErrorList)
+        form = RegisterForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
             username = form.cleaned_data['username']
@@ -24,31 +26,38 @@ def user_register(request):
             password = form.cleaned_data['password']
             password_repeat = form.cleaned_data['password_repeat']
 
-            if User.objects.filter(username=username).exists():
+            try:
+                with transaction.atomic():
+                    if User.objects.filter(username=username).exists():
+                        return render(request, 'store/register.html', {
+                            'form': form,
+                            'error_message': 'Username already exists.'
+                        })
+                    elif User.objects.filter(email=email).exists():
+                        return render(request, 'store/register.html', {
+                            'form': form,
+                            'error_message': 'Email already exists.'
+                        })
+                    elif password != password_repeat:
+                        return render(request, 'store/register.html', {
+                            'form': form,
+                            'error_message': 'Passwords do not match.'
+                        })
+                    else:
+                        # Create the user:
+                        user = User.objects.create_user(username, email, password)
+                        user.save()
+                       
+                        # Login the user
+                        login(request, user)
+                       
+                        # redirect to accounts page:
+                        return HttpResponseRedirect('/store/account')
+            except:
                 return render(request, 'store/register.html', {
                     'form': form,
-                    'error_message': 'Username already exists.'
-                })
-            elif User.objects.filter(email=email).exists():
-                return render(request, 'store/register.html', {
-                    'form': form,
-                    'error_message': 'Email already exists.'
-                })
-            elif password != password_repeat:
-                return render(request, 'store/register.html', {
-                    'form': form,
-                    'error_message': 'Passwords do not match.'
-                })
-            else:
-                # Create the user:
-                user = User.objects.create_user(username, email, password)
-                user.save()
-               
-                # Login the user
-                #login(request, user)
-               
-                # redirect to accounts page:
-                #return HttpResponseRedirect('/store/account')
+                    'error_message': '"Une erreur interne est apparue. Merci de recommencer votre requête."'
+                    })
 
    # No post data availabe, let's just show the page.
     else:
