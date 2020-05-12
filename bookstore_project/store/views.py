@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from store.models import Book, Author, User, Booking
-from .forms import ContactForm, ParagraphErrorList, RegisterForm
+from .forms import ContactForm, ParagraphErrorList, RegisterForm, ConnexionForm
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction, IntegrityError
@@ -10,8 +10,31 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
 # Create your views here.
-def user_account(request):
-    return render(request, 'store/account.html', locals())
+
+def connexion(request):
+    error = False
+
+    if request.method == "POST":
+        form = ConnexionForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+            user = authenticate(username=username, password=password)  # Nous vérifions si les données sont correctes
+            if user:  # Si l'objet renvoyé n'est pas None
+                login(request, user)  # nous connectons l'utilisateur
+                return render(request, 'store/account.html', {   
+                    'form': form,
+                    'error_message': error
+                 }) 
+            else: # sinon une erreur sera affichée
+                error = True
+    else:
+        form = ConnexionForm()
+
+    return render(request, 'store/connexion.html', {
+        'form': form,
+        'error_message': error
+    })
 
 def user_register(request):
 
@@ -52,7 +75,7 @@ def user_register(request):
                         login(request, user)
                        
                         # redirect to accounts page:
-                        return HttpResponseRedirect('/store/account')
+                        #return HttpResponseRedirect('/store/account')
             except:
                 return render(request, 'store/register.html', {
                     'form': form,

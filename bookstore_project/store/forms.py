@@ -26,3 +26,7 @@ class RegisterForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
     password_repeat = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control'}))
+
+class ConnexionForm(forms.Form):
+    username = forms.CharField(label="Nom d'utilisateur", max_length=30)
+    password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
