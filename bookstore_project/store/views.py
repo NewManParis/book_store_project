@@ -163,12 +163,13 @@ def listing(request):
 def search(request):
     query = request.GET.get('query')
     if not query:
-        books = Book.objects.all()
+        #books = Book.objects.all()
+        books = Book.objects.filer(status=AVAILABLE)
     else:
         # title contains the query is and query is not sensitive to case.
-        books = Book.objects.filter(title__icontains=query)
+        books = Book.objects.filter(title__icontains=query, status=AVAILABLE)
     if not books.exists():
-        books = Book.objects.filter(authors__name__icontains=query)
+        books = Book.objects.filter(authors__name__icontains=query, status=AVAILABLE)
     title = "Résultats pour la requête %s"%query
     context = {
         'books': books,
