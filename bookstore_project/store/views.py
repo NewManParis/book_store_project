@@ -48,7 +48,7 @@ def connexion(request):
 def user_register(request):
     #if the user is logged in, redirects him to user_account view
     if request.user.is_authenticated:
-        return user_account(request)
+        render(request, 'store/account.html', locals())
 
     # if this is a POST request we need to process the form data   
     if request.method == 'POST':
@@ -101,77 +101,51 @@ def user_register(request):
     return render(request, 'store/register.html', {'form': form})
 
 def index(request):
-    books = Book.objects.filter(status=1).order_by('-created_at')[:12]
+    books = Book.objects.filter(status=AVAILABLE).order_by('-created_at')[:12]
     context = {
     'books' : books
     }
     return render(request, 'store/index.html', context)
 
-'''def detail(request, book_id):
-    book = get_object_or_404(Book, pk=book_id)
-    context = {'book' : book}
-    if request.method == 'POST':
-        form = ContactForm(request.POST, error_class=ParagraphErrorList)
-        if form.is_valid():
-            user_email = form.cleaned_data['user_email']
-            user_name = form.cleaned_data['user_name']
-
-            try:
-                with transaction.atomic():
-                    contact = User.objects.filter(user_email=user_email)
-                    if not contact.exists():
-                        # If a contact is not registered, create a new one.
-                        contact = User.objects.create(
-                            user_email=user_email,
-                            user_name=user_name
-                        )
-                    else:
-                        contact = contact.first()
-
-                    book = get_object_or_404(Book, id=book_id)
-                    booking = Booking.objects.create(
-                        user=contact,
-                        book=book
-                    )
-                    book.status = BORROWED
-                    book.save()
-                    return render(request, 'store/merci.html', context)
-            except IntegrityError:
-                form.errors['internal'] = "Une erreur interne est apparue. Merci de recommencer votre requête."
-    else:
-        form = ContactForm()
-
-    context['form'] = form
-    context['errors'] = form.errors.items()
-    return render(request, 'store/detail.html', context)'''
-
 def detail(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
-    context = {'book' : book}
+    context = {
+        'book' : book,
+        'book_title': book.title,
+    }
     error = False
-    try:
-        with transaction.atomic():
-            #get the user name
-            if request.user.is_authenticated:
-                username = request.user.username
-                #create booking
-                booking = Booking.objects.create(user=request.user, book=book)
-                #change the status of book in borrowed
-                book.status = BORROWED
-                book.save()
-                return render(request, 'store/detail.html', context)
-    except IntegrityError as e:
-        error = True
-        message = "Une erreur interne est apparue. Merci de recommencer votre requête."
-        context = {
-            'book' : book,
-            'message': message,
-            'error': error
-        }
+    context['request_type'] = 'get'
+    if request.method == 'POST':
+        try:
+            with transaction.atomic():
+                #get the user name
+                if request.user.is_authenticated:
+                    username = request.user.username
+                    #create booking
+                    booking = Booking.objects.create(user=request.user, book=book)
+                    #change the status of book on borrowed
+                    book.status = BORROWED
+                    book.save()
+                    context['request_type'] = 'post_ok'
+                    return render(request, 'store/detail.html', context)
+                    #return render(request, 'store/booking_success.html', context)
+                    
+        except IntegrityError as e:
+            print(e)
+            error = True
+            message = "Une erreur interne est apparue. Merci de recommencer votre requête."
+            context = {
+                'book' : book,
+                'message': message,
+                'error': error
+            }
+            context['request_type'] = 'post_but_exception'
+            return render(request, 'store/detail.html', context)
+
     return render(request, 'store/detail.html', context)
 
 def listing(request):
-    books_list = Book.objects.filter(status=1)
+    books_list = Book.objects.filter(status=AVAILABLE)
     paginator = Paginator(books_list, 5)
     page = request.GET.get('page')
     try:

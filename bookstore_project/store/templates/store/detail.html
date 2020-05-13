@@ -2,6 +2,8 @@
 
 {% block content %}
 
+{{request_type}}
+
 <div class="col-md-6">
 	<img class="img-responsive" src="{{ book.picture }}" alt="{{ book.title }}">
     <h3>{{ book.title }}</h3>
@@ -11,14 +13,23 @@
 </div>
 
 <h2 class="text-center artist_name">Réserver {{ book.title }}</h2>
-<p style="margin-bottom: 20px;">Vous êtes sur le point de réserver {{ book.title }}!</p>	
-<p style="margin-bottom: 20px;">Insérez votre  nom et votre adresse émail et venez le cherchez après en magasin !</p>
 
-    <!--<{% if user.is_authenticated %}
-    <p>Your account doesn't have access to this page. To proceed,
-    please login with an account that has access.</p>
-    {% else %}
-    <p>Please login to see this page.</p>
-    {% endif %}>-->
+{% if user.is_authenticated %}
+	<p style="margin-bottom: 20px;">Hey {{user.username}} !</p>
+	<p style="margin-bottom: 20px;">Vous êtes sur le point de réserver {{ book.title }}!</p>
+	<p style="margin-bottom: 20px;">Cliquer sur le boutton réserver en bas afin de réserver {{ book.title }}!</p>
+	<form class="form-inline" action="{% url 'store:detail' book_id=book.id %}" method="post">
+		{% csrf_token %}
+		<button type="submit" class="btn btn-success">Réserver</button>
+	</form>
+{% else %}
+	<p class="bg-danger">Vous devez vous connecter à votre espace afin de pouvoir réserver {{ book_title }}, Merci!</p>
+{% endif %}
+
+{% if errors %}
+	<div>
+
+	</div>
+{% endif %}
 
 {% endblock %}
