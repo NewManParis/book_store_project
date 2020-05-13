@@ -32,21 +32,7 @@ class Book(models.Model):
 
 	def __str__(self):
 		return self.title
-
-
-'''class User(models.Model):
-	user_name = models.CharField('contact name', max_length=200)
-	user_email = models.EmailField('contact email', max_length=100)
-	password = models.CharField('password', max_length=100)
-	password_repeat = models.CharField('password repeat', max_length=100)
-
-	class Meta:
-		verbose_name = "user" 
-
-	def __str__(self):
-		return self.user_name'''
-
-
+		
 class Booking(models.Model):
 	created_at = models.DateTimeField('creation date', auto_now_add=True)
 	processed = models.BooleanField('is processed ?', default= False)

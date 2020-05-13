@@ -114,7 +114,6 @@ def detail(request, book_id):
         'book_title': book.title,
     }
     error = False
-    context['request_type'] = 'get'
     if request.method == 'POST':
         try:
             with transaction.atomic():
@@ -126,9 +125,8 @@ def detail(request, book_id):
                     #change the status of book on borrowed
                     book.status = BORROWED
                     book.save()
-                    context['request_type'] = 'post_ok'
-                    return render(request, 'store/detail.html', context)
-                    #return render(request, 'store/booking_success.html', context)
+                    #return render(request, 'store/detail.html', context)
+                    return render(request, 'store/booking_success.html', context)
                     
         except IntegrityError as e:
             print(e)
@@ -139,7 +137,6 @@ def detail(request, book_id):
                 'message': message,
                 'error': error
             }
-            context['request_type'] = 'post_but_exception'
             return render(request, 'store/detail.html', context)
 
     return render(request, 'store/detail.html', context)

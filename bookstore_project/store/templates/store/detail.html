@@ -26,10 +26,8 @@
 	<p class="bg-danger">Vous devez vous connecter à votre espace afin de pouvoir réserver {{ book_title }}, Merci!</p>
 {% endif %}
 
-{% if errors %}
-	<div>
-
-	</div>
+{% if True == error %}
+    {{message}}
 {% endif %}
 
 {% endblock %}
