@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from store.choices import * 
 from django import forms
+from django.contrib.auth.models import User
 
 # Create your models here
 class Author(models.Model):
@@ -33,7 +34,7 @@ class Book(models.Model):
 		return self.title
 
 
-class User(models.Model):
+'''class User(models.Model):
 	user_name = models.CharField('contact name', max_length=200)
 	user_email = models.EmailField('contact email', max_length=100)
 	password = models.CharField('password', max_length=100)
@@ -43,7 +44,7 @@ class User(models.Model):
 		verbose_name = "user" 
 
 	def __str__(self):
-		return self.user_name
+		return self.user_name'''
 
 
 class Booking(models.Model):

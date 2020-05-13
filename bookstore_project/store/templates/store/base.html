@@ -45,8 +45,25 @@
                     <li>
                         <h3><a href="{% url 'store:listing' %}">Tous nos livres</a></h3> 
                     </li>
-                </ul>
+                </ul>   
             </div>
+
+            {% if user.is_authenticated %}
+                <div class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{% url 'store:user_account' %}"><span class="glyphicon glyphicon-user"></span>Mon espace</a>
+                    </li>
+            {% else %}
+                <div class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="{% url 'store:user_register' %}"><span class="glyphicon glyphicon-user"></span>S'inscrire</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'store:connexion' %}"><span class="glyphicon glyphicon-log-in"></span>Se connecter</a>
+                    </li>
+                </div>
+            {% endif %}>
+
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->

@@ -1,23 +1,28 @@
 from django.shortcuts import render
-from store.models import Book, Author, User, Booking
-from .forms import ContactForm, ParagraphErrorList, RegisterForm, ConnexionForm
+from store.models import Book, Author, Booking
+from .forms import ParagraphErrorList, RegisterForm, ConnexionForm
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction, IntegrityError
 from store.choices import * 
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.urls import reverse
 
 # Create your views here.
+def user_account(request):
+    return render(request, 'store/account.html', locals())
+
 def deconnexion(request):
     logout(request)
     return HttpResponseRedirect(reverse('store:connexion'))
 
 def connexion(request):
-    error = False
+    if request.user.is_authenticated:
+        return render(request, 'store/connexion.html', locals())
 
+    error = False
     if request.method == "POST":
         form = ConnexionForm(request.POST)
         if form.is_valid():
@@ -26,7 +31,7 @@ def connexion(request):
             user = authenticate(username=username, password=password)  # Nous vérifions si les données sont correctes
             if user:  # Si l'objet renvoyé n'est pas None
                 login(request, user)  # nous connectons l'utilisateur
-                return render(request, 'store/account.html', {   
+                return render(request, 'store/connexion.html', {   
                     'form': form,
                     'error_message': error
                  }) 
@@ -41,6 +46,9 @@ def connexion(request):
     })
 
 def user_register(request):
+    #if the user is logged in, redirects him to user_account view
+    if request.user.is_authenticated:
+        return user_account(request)
 
     # if this is a POST request we need to process the form data   
     if request.method == 'POST':
@@ -99,7 +107,7 @@ def index(request):
     }
     return render(request, 'store/index.html', context)
 
-def detail(request, book_id):
+'''def detail(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     context = {'book' : book}
     if request.method == 'POST':
@@ -135,6 +143,31 @@ def detail(request, book_id):
 
     context['form'] = form
     context['errors'] = form.errors.items()
+    return render(request, 'store/detail.html', context)'''
+
+def detail(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    context = {'book' : book}
+    error = False
+    try:
+        with transaction.atomic():
+            #get the user name
+            if request.user.is_authenticated:
+                username = request.user.username
+                #create booking
+                booking = Booking.objects.create(user=request.user, book=book)
+                #change the status of book in borrowed
+                book.status = BORROWED
+                book.save()
+                return render(request, 'store/detail.html', context)
+    except IntegrityError as e:
+        error = True
+        message = "Une erreur interne est apparue. Merci de recommencer votre requête."
+        context = {
+            'book' : book,
+            'message': message,
+            'error': error
+        }
     return render(request, 'store/detail.html', context)
 
 def listing(request):
