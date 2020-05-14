@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 # Create your views here.
-def user_account(request):
+def account(request):
     return render(request, 'store/account.html', locals())
 
 def deconnexion(request):
@@ -86,8 +86,8 @@ def user_register(request):
                         # Login the user
                         login(request, user)
                        
-                        # redirect to accounts page:
-                        #return HttpResponseRedirect('/store/account')
+                        # redirect to account page:
+                        #render(request, 'store/account.html', locals())
             except:
                 return render(request, 'store/register.html', {
                     'form': form,

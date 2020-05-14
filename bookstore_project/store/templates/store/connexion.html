@@ -5,7 +5,7 @@
 
     {% if user.is_authenticated %}
         <p class="text-success">Vous êtes connecté !</p>
-        <p>Pour vous rendre sur votre espace <a href="{% url 'store:user_account' %}">Cliquer ici !</a></p>   
+        <p>Pour vous rendre sur votre espace <a href="{% url 'store:account' %}">Cliquer ici !</a></p>   
     {% else %}
         <div class="container">
             <form action="{% url 'store:connexion' %}" method="post">
