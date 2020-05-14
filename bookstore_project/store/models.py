@@ -47,7 +47,7 @@ class Booking(models.Model):
 	def __str__(self):
 		return self.user.name
 
-class Profil(models.Model):
+class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)  # OneToOne to User model
 	web_site = models.URLField(blank=True)
 	#avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
@@ -56,7 +56,7 @@ class Profil(models.Model):
 
 	def __str__(self):
 		return "Profil of {0}".format(self.user.username)
-	
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:

@@ -1,6 +1,8 @@
 from django.forms import ModelForm, TextInput, EmailInput, PasswordInput
 from django.forms.utils import ErrorList
 from django import forms
+from django.contrib.auth.models import User
+from .models import Profile
 
 class ParagraphErrorList(ErrorList):
     def __str__(self):
@@ -18,3 +20,13 @@ class RegisterForm(forms.Form):
 class ConnexionForm(forms.Form):
     username = forms.CharField(label="Nom d'utilisateur", max_length=30)
     password = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('web_site', 'signature')
