@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from store.models import Book, Author, Booking, Profile
-from .forms import ParagraphErrorList, RegisterForm, ConnexionForm
+from .forms import ParagraphErrorList, RegisterForm, ConnexionForm, UserForm, ProfileForm
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db import transaction, IntegrityError
@@ -82,13 +82,15 @@ def user_register(request):
                     else:
                         # Create the user:
                         user = User.objects.create_user(username, email, password)
-                        user.save()
-                       
+                        user.save()       
+
                         # Login the user
                         login(request, user)
-                       
-                        # redirect to account page:
-                        #render(request, 'store/account.html', locals())
+
+                        return render(request, 'store/register.html', {
+                            'form': form,
+                            'error_message': "Inscription réussie, vous pouvez désormais réserver les livres disponibles !"
+                           })
             except:
                 return render(request, 'store/register.html', {
                     'form': form,
@@ -161,8 +163,7 @@ def listing(request):
 def search(request):
     query = request.GET.get('query')
     if not query:
-        #books = Book.objects.all()
-        books = Book.objects.filer(status=AVAILABLE)
+        books = Book.objects.filter(status=AVAILABLE)
     else:
         # title contains the query is and query is not sensitive to case.
         books = Book.objects.filter(title__icontains=query, status=AVAILABLE)
@@ -178,20 +179,57 @@ def search(request):
 @login_required
 @transaction.atomic
 def update_profile(request):
+    bookings = Booking.objects.all()
+    #get user's bookings
+    books= []
+    for e in bookings:
+        if (e.user.username == request.user.username):
+            books.append(e.book)
+    context = {
+        'books': books,
+        'username' : request.user.username,
+        'email' : request.user.email,
+        'web_site' : request.user.profile.web_site,
+        'signature' : request.user.profile.signature,
+        'avatar' : request.user.profile.avatar
+    }
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, _('Your profile was successfully updated!'))
-            return redirect('store:account')
-        else:
-            messages.error(request, _('Please correct the error below.'))
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=request.user.profile)
-    return render(request, 'store/account.html', {
-        'user_form': user_form,
-        'profile_form': profile_form
-    })
+            username = user_form['username']
+            email = user_form['email']
+            context['user_form'] = user_form
+            context['profile_form'] = profile_form
+            try:
+                if User.objects.filter(username=username).exists():
+                    context['message'] = "Nom d'utilisateur existe dans la base de donnée !"
+                    return render(request, 'store/account.html', context)
+                elif User.objects.filter(email=email).exists():
+                    context['message'] = 'Email existe dans la base de donnée !'
+                    return render(request, 'store/account.html', context)
+                else:
+                    user_form.save()
+                    profile_form.save()
+                    #update context
+                    context = {
+                        'books': books,
+                        'username' : request.user.username,
+                        'email' : request.user.email,
+                        'web_site' : request.user.profile.web_site,
+                        'signature' : request.user.profile.signature,
+                        'avatar' : request.user.profile.avatar,
+                    }
+                    context['user_form'] = user_form
+                    context['profile_form'] = profile_form
+                    context['message'] = 'Votre profil est mis à jour !'
+                    return render(request, 'store/account.html', context)
+            except:
+                context['message'] = 'Une erreur interne est apparue. Merci de recommencer votre requête.'
+                return render(request, 'store/account.html', context)
+
+    user_form = UserForm(instance=request.user)
+    profile_form = ProfileForm(instance=request.user.profile)
+    context['user_form'] = user_form
+    context['profile_form'] = profile_form
+    return render(request, 'store/account.html', context)

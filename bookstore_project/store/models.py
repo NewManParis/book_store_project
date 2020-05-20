@@ -45,12 +45,12 @@ class Booking(models.Model):
 		verbose_name = "booking" 
 
 	def __str__(self):
-		return self.user.name
+		return self.user.username
 
 class Profile(models.Model):
 	user = models.OneToOneField(User, on_delete=models.CASCADE)  # OneToOne to User model
 	web_site = models.URLField(blank=True)
-	#avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
+	avatar = models.ImageField(null=True, blank=True, upload_to="avatars/")
 	signature = models.TextField(blank=True)   
 	subscribed_newsletter = models.BooleanField(default=False)
 

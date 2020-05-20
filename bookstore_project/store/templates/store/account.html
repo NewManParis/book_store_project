@@ -1,8 +1,105 @@
-hello ! 
+{% extends 'store/base.html' %}
+{% block content %}
 
-<form method="post">
-  {% csrf_token %}
-  {{ user_form.as_p }}
-  {{ profile_form.as_p }}
-  <button type="submit">Save changes</button>
-</form>
+    {% if message %}
+			 <p class="bg-danger p-d ml-b">{{ message }}</p>
+	{% endif %}	
+	<div class="container">
+	    <div class="row my-2">
+	        <div class="col-lg-8 order-lg-2">
+	            <ul class="nav nav-tabs">
+	                <li class="nav-item">
+	                    <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
+	                </li>
+	                <li class="nav-item">
+	                    <a href="" data-target="#Réservations" data-toggle="tab" class="nav-link">Réservations</a>
+	                </li>
+	                <li class="nav-item">
+	                    <a href="" data-target="#edit" data-toggle="tab" class="nav-link">Edit</a>
+	                </li>
+	            </ul>
+	            <div class="tab-content py-4">
+	                <div class="tab-pane active" id="profile">
+	                    <h5 class="mb-3">Profil</h5>
+	                    <div class="row">
+	                        <div class="col-md-6">
+	                            <h6>Nom</h6>
+	                            <p>
+	                                {{username}}
+	                            </p>
+	                            <h6>Email</h6>
+	                            <p>
+	                                {{email}}
+	                            </p>
+	                            <h6>Site web</h6>
+	                            <p>
+	                                {{web_site}}
+	                            </p>
+	                            <h6>Signature</h6>
+	                            <p>
+	                                {{signature}}
+	                            </p>
+	                        </div>
+	                    </div>
+	                    <!--/row-->
+	                </div>
+	                <div class="tab-pane" id="Réservations">
+						{% for book in books %}
+							<div class="col-sm-4 text-center">
+							    <a href="{% url 'store:detail' book_id=book.id %}">
+							      <img class="img-responsive" src="{{ book.picture }}" alt="{{ book.title }}">
+							    </a>
+							    <h3><a href="{% url 'store:detail' book_id=book.id %}">{{ book.title }}</a></h3>
+							    {% for author in book.authors.all %}
+							        <p>{{ author.name }}</p>
+							    {% endfor %}
+							</div>
+							{% if forloop.counter|divisibleby:3 %}<div class="clearfix"></div>{% endif %}
+						{% endfor %}
+	                </div>
+	                <div class="tab-pane" id="edit">
+			            <form action="{% url 'store:account' %}" method="post">
+			                {% csrf_token %}
+			                <div class="col-md-8 col-md-offset-2">
+			                    <div class="panel panel-default">
+			                        <div class="panel-heading">profil infos</div>
+			                        <div class="panel-body">	                           
+			                            <div class="form-group clearfix">
+			                                <label for="{{ user_form.username.id_for_label }}" class="col-md-4 control-label text-right">Nom d'utilisateur<span class="text-red">*</span>:</label>
+			                                <div class="col-md-6">
+			                                    {{ user_form.username }}
+			                                </div>
+			                            </div>
+			                            <div class="form-group clearfix">
+			                                <label for="{{ user_form.email.id_for_label }}" class="col-md-4 control-label text-right">Email<span class="text-red">*</span>:</label>
+			                                <div class="col-md-6">
+			                                    {{ user_form.email }}
+			                                </div>
+			                            </div>
+			                            <div class="form-group clearfix">
+			                                <label for="{{ profile_form.web_site.id_for_label }}" class="col-md-4 control-label text-right">Site web<span class="text-red"></span>:</label>
+			                                <div class="col-md-6">
+			                                    {{ profile_form.web_site }}
+			                                </div>
+			                            </div>
+			                            <div class="form-group clearfix">
+			                                <label for="{{ profile_form.signature.id_for_label }}" class="col-md-4 control-label text-right">Signature<span class="text-red"></span>:</label>
+			                                <div class="col-md-6">
+			                                    {{ profile_form.signature }}
+			                                </div>
+			                            </div>
+			                            <div class="col-md-6 col-md-offset-4">
+			                                <input type="submit" value="Modifier" class="btn btn-success">
+			                            </div>
+			                        </div>
+			                    </div>
+			                </div>
+			            </form>
+	                </div>
+	            </div>
+	        </div>
+
+	        
+	    </div>
+	</div>
+{% endblock %}
