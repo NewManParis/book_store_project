@@ -99,7 +99,15 @@
 	            </div>
 	        </div>
 
-	        
+			<div class="col-lg-4 order-lg-1 text-center">
+			  	<form action="{% url 'store:account' %}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+							{{ profile_form.avatar }}
+							<img src="{{ profile_form.avatar.url }}" />
+                        <input type="submit" value="Modifier avatar" class="btn btn-success">
+				</form>  
+			</div>
+
 	    </div>
 	</div>
 {% endblock %}

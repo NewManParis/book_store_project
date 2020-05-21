@@ -195,8 +195,9 @@ def update_profile(request):
     }
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
-        profile_form = ProfileForm(request.POST, instance=request.user.profile)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
+            #print('profile_form is valid !')
             username = user_form['username']
             email = user_form['email']
             context['user_form'] = user_form
@@ -227,6 +228,9 @@ def update_profile(request):
             except:
                 context['message'] = 'Une erreur interne est apparue. Merci de recommencer votre requête.'
                 return render(request, 'store/account.html', context)
+        else:
+            pass
+            #print('profile_form is not valid !')
 
     user_form = UserForm(instance=request.user)
     profile_form = ProfileForm(instance=request.user.profile)

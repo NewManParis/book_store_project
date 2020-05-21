@@ -15,13 +15,18 @@
 <h2 class="text-center artist_name">Réserver {{ book.title }}</h2>
 
 {% if user.is_authenticated %}
-	<p style="margin-bottom: 20px;">Hey {{user.username}} !</p>
-	<p style="margin-bottom: 20px;">Vous êtes sur le point de réserver {{ book.title }}!</p>
-	<p style="margin-bottom: 20px;">Cliquer sur le boutton réserver en bas afin de réserver {{ book.title }}!</p>
-	<form class="form-inline" action="{% url 'store:detail' book_id=book.id %}" method="post">
-		{% csrf_token %}
-		<button type="submit" class="btn btn-success">Réserver</button>
-	</form>
+	{% if book.status == 2 %}
+		<p class="bg-danger">Vous avez déjà réservé {{ book_title }} !</p>
+	{% else %}
+		<p style="margin-bottom: 20px;">Hey {{user.username}} !</p>
+		<p style="margin-bottom: 20px;">Vous êtes sur le point de réserver {{ book.title }}!</p>
+		<p style="margin-bottom: 20px;">Cliquer sur le boutton réserver en bas afin de réserver {{ book.title }}!</p>
+		<form class="form-inline" action="{% url 'store:detail' book_id=book.id %}" method="post">
+			{% csrf_token %}
+			<button type="submit" class="btn btn-success">Réserver</button>
+		</form>
+	{% endif %}
+
 {% else %}
 	<p class="bg-danger">Vous devez vous connecter à votre espace afin de pouvoir réserver {{ book_title }}, Merci!</p>
 {% endif %}
