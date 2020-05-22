@@ -54,6 +54,9 @@ class Profile(models.Model):
 	signature = models.TextField(blank=True)   
 	subscribed_newsletter = models.BooleanField(default=False)
 
+	class Meta:
+		verbose_name = "profile"
+
 	def __str__(self):
 		return "Profil of {0}".format(self.user.username)
 
