@@ -83,10 +83,10 @@ def user_register(request):
                         # Create the user:
                         try:
                             user = User.objects.create_user(username, email, password)
-                        except:
+                        except Exception as e:
                             return render(request, 'store/register.html', {
                             'form': form,
-                            'error_message': "error in create user"
+                            'error_message': str(e)s
                            })
 
                         try:
