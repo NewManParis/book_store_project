@@ -58,7 +58,7 @@ class Profile(models.Model):
 		verbose_name = "profile"
 
 	def __str__(self):
-		return "Profil of {0}".format(self.user.username)
+		return self.user.username
 
 '''@receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
