@@ -83,7 +83,7 @@ def user_register(request):
                         # Create the user:
                         try:
                             user = User.objects.create_user(username, email, password)
-                            profile = Profile.objects.create(user=user)
+                            #profile = Profile.objects.create(user=user)
                         except Exception as e:
                             return render(request, 'store/register.html', {
                             'form': form,
@@ -92,7 +92,7 @@ def user_register(request):
 
                         try:
                             user.save()
-                            profile.save()
+                            #profile.save()
                         except:
                             return render(request, 'store/register.html', {
                             'form': form,
