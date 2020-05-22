@@ -83,6 +83,7 @@ def user_register(request):
                         # Create the user:
                         try:
                             user = User.objects.create_user(username, email, password)
+                            profile = Profile.objects.create(user=user)
                         except Exception as e:
                             return render(request, 'store/register.html', {
                             'form': form,
@@ -91,6 +92,7 @@ def user_register(request):
 
                         try:
                             user.save()
+                            profile.save()
                         except:
                             return render(request, 'store/register.html', {
                             'form': form,
@@ -215,7 +217,6 @@ def update_profile(request):
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
-            #print('profile_form is valid !')
             username = user_form['username']
             email = user_form['email']
             context['user_form'] = user_form
