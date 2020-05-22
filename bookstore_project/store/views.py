@@ -86,7 +86,7 @@ def user_register(request):
                         except Exception as e:
                             return render(request, 'store/register.html', {
                             'form': form,
-                            'error_message': str(e)s
+                            'error_message': str(e)
                            })
 
                         try:
