@@ -81,12 +81,30 @@ def user_register(request):
                         })
                     else:
                         # Create the user:
-                        user = User.objects.create_user(username, email, password)
-                        user.save()       
+                        try:
+                            user = User.objects.create_user(username, email, password)
+                        except:
+                            return render(request, 'store/register.html', {
+                            'form': form,
+                            'error_message': "error in create user"
+                           })
+
+                        try:
+                            user.save()
+                        except:
+                            return render(request, 'store/register.html', {
+                            'form': form,
+                            'error_message': "error in save user!"
+                           })       
 
                         # Login the user
-                        login(request, user)
-
+                        try:
+                            login(request, user)
+                        except:
+                            return render(request, 'store/register.html', {
+                            'form': form,
+                            'error_message': "error in login user !"
+                           })
                         return render(request, 'store/register.html', {
                             'form': form,
                             'error_message': "Inscription réussie, vous pouvez désormais réserver les livres disponibles !"
